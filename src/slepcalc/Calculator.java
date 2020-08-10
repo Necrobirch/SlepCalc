@@ -167,14 +167,18 @@ public class Calculator extends javax.swing.JFrame {
         String missions = algo(exp_needed, ap_left, ""); // calculate combinations
         if (missions.substring(0, 3).equals("err")) { // Not enough AP was available, handle output
             //output has form "err;missing experience;missions you can do for most xp"
+            System.out.println(missions);
             String[] results = missions.split(":");
             if (results.length == 3) {
                 String output = "You do not have enough AP, you will be short " + results[1] + " experience";
                 output += "\nYour optimal route with the AP available is: \n";
                 String[] submissions = results[2].split(";"); // Split act and chapter
+                int tally = 0; // sum up total AP used
                 for (String i : submissions) {
-                    if (!i.isEmpty() && i.length() == 2) {
-                        output += "Act " + i.substring(0, 1) + " chapter " + i.substring(1) + "\n";
+                    String[] entries = i.split("#");
+                    if (!entries[0].isEmpty() && entries[0].length() == 2) {
+                        output += "Act " + entries[0].substring(0, 1) + " chapter " + entries[0].substring(1) + "; " + entries[1] + " AP\n";
+                        tally += Integer.valueOf(entries[1]);
                     }
                 }
                 return output;
